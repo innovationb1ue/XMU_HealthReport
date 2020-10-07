@@ -2,9 +2,10 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from app.Cores.DB_conn import DBConnector
 from app.Cores.health_report_api import health_report
 from app.Cores.login_logic import login_xmuxg
+from app.CONFIG import *
 
 
-conn = DBConnector()
+conn = DBConnector(MONGODB_USER, MONGODB_PWD)
 sche = BlockingScheduler()
 
 @sche.scheduled_job('cron', day_of_week='*', hour=12, minute=0, second=0)

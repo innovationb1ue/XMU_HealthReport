@@ -1,5 +1,6 @@
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from flask import request
 
 from flask_restplus import Resource, fields
 
@@ -8,17 +9,18 @@ from ..Cores.DB_conn import DBConnector
 from ..Cores.Parsers import apply_parser
 from ..Cores.health_report_api import health_report
 from ..Cores.login_logic import login_xmuxg
+from ..CONFIG import *
 
 Executor = ThreadPoolExecutor(max_workers=2)
-
 
 apply_payload = api_rest.model('Payload', {
     'username': fields.String(required=True),
     'password': fields.String(required=True),
-    'N': fields.Integer
+    'N': fields.Integer,
+    'timed':fields.Boolean
 })
 
-conn = DBConnector()
+conn = DBConnector(MONGODB_USER, MONGODB_PWD, MONGODB_DBNAME)
 
 
 @api_rest.route('/report_result/<string:result_id>')
@@ -40,29 +42,30 @@ class ReportApply(Resource):
         username = args.get('username')
         password = args.get('password')
         N = args.get('N')
+        timed = args.get('timed')
         if not username or not password or not N:
             return {'message': 'Empty fields'}
         task_uuid = str(uuid.uuid4())
-        Executor.submit(self.do_report, task_uuid, username, password, N)
+        Executor.submit(self.do_report, task_uuid, username, password, N, timed)
         return {'message': 'ok', 'uuid': task_uuid}
 
     @staticmethod
-    def do_report(task_uuid:str, username, password, N):
+    def do_report(task_uuid:str, username, password, N, timed):
         conn.upsert_result(task_uuid, 'Proceeding, Need a moment.')
         s = login_xmuxg(username, password)
         if not s:
             conn.upsert_result(task_uuid, "Failed to login. ")
             return
-        up_status = conn.upsert_account({'username': username, "password": password})
+        conn.upsert_account(username, password)
+        if timed:
+            conn.upsert_time_task(username, password)
         res = health_report(int(N), s)
-        print(f'uuid: {task_uuid} and res: {res}')
+        print(f'uuid: {task_uuid} \nres: {res}')
         conn.upsert_result(task_uuid, res)
+
 
 @api_rest.route('/time_task_apply')
 class TimeTask(Resource):
-    def get(self):
-        return {'meesage':'Only support POST method'}
-
     def post(self):
         args = apply_parser.parse_args()
         username = args.get('username')
@@ -81,6 +84,7 @@ class TimeTaskDelete(Resource):
             return {'message': 'empty fields'}
         conn.del_time_task(username)
 
+
 @api_rest.route('/login')
 class LoginMethod(Resource):
     def post(self):
@@ -91,7 +95,7 @@ class LoginMethod(Resource):
         if not login_status:
             return False
         else:
-            return 'called login method'
+            return {'cookies':'cookies string'}
 
 
 

@@ -15,3 +15,4 @@ def add_header(response):
 
 # Import resources to ensure view is registered
 from .report import * # NOQA
+from .manage import *
