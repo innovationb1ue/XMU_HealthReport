@@ -1,7 +1,7 @@
-from flask_restplus import Resource, fields
-from flask import redirect
-from .security import require_auth
+from flask_restplus import Resource
+
 from . import api_rest
+from .security import require_auth
 
 
 class SecureResource(Resource):

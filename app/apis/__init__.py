@@ -1,6 +1,6 @@
 """ API Blueprint Application """
 
-from flask import Blueprint, current_app
+from flask import Blueprint
 from flask_restplus import Api
 
 api_rep = Blueprint('api_rep', __name__, url_prefix=None)

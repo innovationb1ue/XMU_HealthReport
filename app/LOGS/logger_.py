@@ -1,6 +1,7 @@
 import logging
 
 
+
 class NewLogger:
     def __init__(self, log_abs_path:str):
         self.logger = logging.getLogger()

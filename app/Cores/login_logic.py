@@ -19,13 +19,8 @@ def login_xmuxg(username:str, password:str):
     try:
         name = r1.json()['data']['name']
         print(f'登陆成功！你好: {name}')
-        return s
+        return s, name
     except Exception as e:
         print('登录失败.')
-        return None
-
-
-if __name__ == '__main__':
-    login_xmuxg('', '') # test method. input your name&pass here to run the test
-
+        return None, None
 

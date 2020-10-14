@@ -5,14 +5,20 @@ from app.Cores.login_logic import login_xmuxg
 from app.CONFIG import *
 
 
-conn = DBConnector(MONGODB_USER, MONGODB_PWD)
+conn = DBConnector(MONGODB_USER, MONGODB_PWD, MONGODB_DBNAME)
 sche = BlockingScheduler()
+
 
 @sche.scheduled_job('cron', day_of_week='*', hour=12, minute=0, second=0)
 def time_report_job():
-    for j in conn.get_time_tasks():
-        s = login_xmuxg(j.get('username'), j.get('password'))
-        health_report(1, s)
+    dicts = conn.get_time_tasks()
+    for j in dicts:
+        s, name = login_xmuxg(j.get('username'), j.get('password'))
+        if s:
+            health_report(1, s)
+        else:
+            print('Login failed')
+            pass
 
 
 if __name__ == '__main__':
