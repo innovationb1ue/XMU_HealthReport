@@ -1,5 +1,10 @@
 # XMU_AutoHealthReporter
  
+## Chinese introduction
+厦门大学打卡助手，可以自动打卡（每天中午12点），补打卡等.
+
+
+## Introduction
  
  Powerful tool for those who forget to do the daily health report and get some trouble. Use this to almost immediately get green code and compensate for report of any day you want. ENJOY IT :)
  
@@ -11,7 +16,7 @@
  (Your code won't turn green right after you use this script, but will on the second day)
  
  ## Online Demo
-not available right now
+http://106.12.101.46/#/health_report
 
 ## app
 App dir is the project that will be deployed in a server that every one could reach without any code knowledge.
