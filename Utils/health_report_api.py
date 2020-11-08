@@ -24,13 +24,12 @@ def health_report(USERNAME, PASSWORD, N):
                 {"name": "select_1582538846920",
                  "title": "是否出现发热或咳嗽或胸闷或呼吸困难等症状？Do you have sypmtoms such as fever, coughing, chest tightness or breath difficulties?",
                  "value": {"stringValue": "否 No"}, "hide": false},
-                {"name": "select_1584240106785", "title": "学生本人是否填写", "value": {"stringValue": "是"},
-                 "hide": false}, {"name": "select_1582538939790",
-                                  "title": "Can you hereby declare that all the information provided is all true and accurate and there is no concealment, false information or omission. 本人是否承诺所填报的全部内容均属实、准确，不存在任何隐瞒和不实的情况，更无遗漏之处。",
-                                  "value": {"stringValue": "是 Yes"}, "hide": false},
+                {"name": "select_1582538939790", "title": "Can you hereby declare that all the information provided is all true and accurate and there is no concealment, false information or omission. 本人是否承诺所填报的全部内容均属实、准确，不存在任何隐瞒和不实的情况，更无遗漏之处。",
+                "value": {"stringValue": "是 Yes"}, "hide": false},
                 {"name": "input_1582538924486", "title": "备注 Notes", "value": {"stringValue": ""},
                  "hide": false}], "playerId": "owner"}
             resp = s.post(form_url, data=json.dumps(form_data), headers=Headers)
+            print(resp.content.decode('utf-8'))
         # print(resp.content.decode('utf-8'))
         print('打卡完毕!')
         return 'Succeeded'

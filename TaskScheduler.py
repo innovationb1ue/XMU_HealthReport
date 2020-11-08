@@ -13,10 +13,14 @@ sche = BlockingScheduler()
 def time_report_job():
     dicts = conn.get_time_tasks()
     for j in dicts:
-        s, name = login_xmuxg(j.get('username'), j.get('password'))
+        username = j.get('username')
+        password = j.get('password')
+        s, name = login_xmuxg(username, password)
         if s:
             health_report(1, s)
         else:
+            # try to del time task if password is wrong.
+            conn.del_time_task(username)
             print('Login failed')
             pass
 
