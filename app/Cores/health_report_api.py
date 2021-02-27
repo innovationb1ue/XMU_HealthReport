@@ -1,5 +1,5 @@
 import json
-from .login_logic import login_xmuxg
+
 import requests
 
 
@@ -36,4 +36,3 @@ def health_report(N, s: requests.Session) -> str:
     except Exception as e:
         print(e)
         return 'Exception!'
-

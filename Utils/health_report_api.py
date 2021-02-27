@@ -1,5 +1,8 @@
+import datetime
 import json
+
 from .login import login_xmuxg
+
 
 def health_report(USERNAME, PASSWORD, N):
     Headers = {'content-type': 'application/json'}
@@ -7,7 +10,7 @@ def health_report(USERNAME, PASSWORD, N):
     if not s:
         return 'Failed to Cores. Please check username and password. '
     try:
-        resp = s.get('https://xmuxg.xmu.edu.cn/api/app/214/business/now')
+        resp = s.get('https://xmuxg.xmu.edu.cn/api/app/214/business/now?getFirst=true')  # 新增getFirst参数，避免加载太久
         form_dict = resp.json()
         # change deate in below line ()
         for i in range(N):
@@ -24,10 +27,17 @@ def health_report(USERNAME, PASSWORD, N):
                 {"name": "select_1582538846920",
                  "title": "是否出现发热或咳嗽或胸闷或呼吸困难等症状？Do you have sypmtoms such as fever, coughing, chest tightness or breath difficulties?",
                  "value": {"stringValue": "否 No"}, "hide": false},
-                {"name": "select_1582538939790", "title": "Can you hereby declare that all the information provided is all true and accurate and there is no concealment, false information or omission. 本人是否承诺所填报的全部内容均属实、准确，不存在任何隐瞒和不实的情况，更无遗漏之处。",
-                "value": {"stringValue": "是 Yes"}, "hide": false},
+                {"name": "select_1582538939790",
+                 "title": "Can you hereby declare that all the information provided is all true and accurate and there is no concealment, false information or omission. 本人是否承诺所填报的全部内容均属实、准确，不存在任何隐瞒和不实的情况，更无遗漏之处。",
+                 "value": {"stringValue": "是 Yes"}, "hide": false},
                 {"name": "input_1582538924486", "title": "备注 Notes", "value": {"stringValue": ""},
-                 "hide": false}], "playerId": "owner"}
+                 "hide": false},
+                {"name": "datetime_1611146487222", "title": "打卡时间（无需填写，保存后会自动更新）",
+                 "value": {"dateValue": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, "hide": false,
+                 "readonly": false},
+                {"name": "select_1584240106785", "title": "学生本人是否填写",
+                 "value": {"stringValue": "是"}, "hide": false, "readonly": false}
+            ], "playerId": "owner"}
             resp = s.post(form_url, data=json.dumps(form_data), headers=Headers)
             print(resp.content.decode('utf-8'))
         # print(resp.content.decode('utf-8'))
@@ -36,4 +46,3 @@ def health_report(USERNAME, PASSWORD, N):
     except Exception as e:
         print(e)
         return 'Exception!'
-

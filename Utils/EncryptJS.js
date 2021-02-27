@@ -747,5 +747,3 @@ function _rds(len) {
 function encrypt_pass(password, key){
     return encryptAES(password,key)
 }
-
-console.log(encrypt_pass('123456'))
