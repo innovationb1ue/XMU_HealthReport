@@ -9,7 +9,7 @@ def health_report(N, s: requests.Session) -> str:
         resp = s.get('https://xmuxg.xmu.edu.cn/api/app/214/business/now')
         form_dict = resp.json()
         # change deate in below line ()
-        for i in range(N):
+        for i in range(0, 1): # only support 1 day since the website forbidden modify of result of former days. 
             businessId = form_dict['data'][i]['business']['id']
             resp = s.get(f'https://xmuxg.xmu.edu.cn/api/formEngine/business/{businessId}/myFormInstance')
             myFormJson = resp.json()
