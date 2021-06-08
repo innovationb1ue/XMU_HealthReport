@@ -34,16 +34,15 @@ class ReportApply(Resource):
         args = apply_parser.parse_args()
         username = args.get('username')
         password = args.get('password')
-        N = args.get('N')
-        timed = args.get('timed') # 1开启 2关闭 3维持
-        if not username or not password or not N:
+        timed = args.get('timed')  # 1开启 2关闭 3维持
+        if not username or not password:
             return {'message': 'Empty fields'}
         task_uuid = str(uuid.uuid4())
-        Executor.submit(self.do_report, task_uuid, username, password, N, timed)
+        Executor.submit(self.do_report, task_uuid, username, password, timed)
         return {'message': 'ok', 'uuid': task_uuid}
 
     @staticmethod
-    def do_report(task_uuid:str, username, password, N, timed):
+    def do_report(task_uuid: str, username, password, timed):
         conn.upsert_result(task_uuid, 'Proceeding, Need a moment.', task_status=2)
         s, name = login_xmuxg(username, password)
         if not s:
@@ -55,9 +54,11 @@ class ReportApply(Resource):
             conn.upsert_time_task(username, password)
         elif timed == '2':
             conn.del_time_task(username)
-        else:
+        elif timed == '3':
             pass
-        res = health_report(int(N), s)
+        else:
+            raise ValueError(f"param time is set to {timed}")
+        res = health_report(s)
         print(f'uuid: {task_uuid} \nres: {res}')
         conn.upsert_result(task_uuid, res, task_status=3)
 

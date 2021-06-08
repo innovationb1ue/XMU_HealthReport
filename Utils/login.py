@@ -2,13 +2,16 @@ import requests
 from bs4 import BeautifulSoup as bs
 import execjs
 
-Headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'}
+Headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4'
+                         '103.116 Safari/537.36'}
+
 
 def encrypt(pwd, key):
     with open('Utils/EncryptJS.js', 'r') as f:
         js_str = f.read()
     js = execjs.compile(js_str)
     return js.call('encrypt_pass', pwd, key)
+
 
 def login_xmuxg(username:str, password:str):
     s = requests.Session()
@@ -30,6 +33,7 @@ def login_xmuxg(username:str, password:str):
 
 
 if __name__ == '__main__':
-    login_xmuxg('', '') # test method. input your name&pass here to run the test
+    res = login_xmuxg('', '') # test method. input your name&pass here to run the test
+    print(res)
 
 

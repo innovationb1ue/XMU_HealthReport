@@ -3,7 +3,7 @@ import json
 import requests
 
 
-def health_report(N, s: requests.Session) -> str:
+def health_report(s: requests.Session) -> str:
     Headers = {'content-type': 'application/json'}
     try:
         resp = s.get('https://xmuxg.xmu.edu.cn/api/app/214/business/now')

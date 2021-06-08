@@ -5,7 +5,7 @@ Headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
                          ' like Gecko) Chrome/83.0.4103.116 Safari/537.36'}
 
 
-def login_xmuxg(username:str, password:str):
+def login_xmuxg(username: str, password: str) -> (requests.Session, str):
     s = requests.Session()
     resp = s.get('https://ids.xmu.edu.cn/authserver/login?service=https://xmuxg.xmu.edu.cn/login/cas/xmu',
                  headers=Headers)
@@ -21,6 +21,6 @@ def login_xmuxg(username:str, password:str):
         print(f'登陆成功！你好: {name}')
         return s, name
     except Exception as e:
-        print('登录失败.')
+        print('登录失败.', str(e))
         return None, None
 
